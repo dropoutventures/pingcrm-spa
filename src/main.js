@@ -11,7 +11,10 @@ import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
 import { trail, defineRoutes, route, current } from "momentum-trail";
-import routes from './routes.json'; defineRoutes(routes);
+import routes from './routes.json';
+const APP_URL = ((!/^https?:\/\//i.test(import.meta.env.VITE_APP_URL)) ? 'https://' : '') + import.meta.env.VITE_APP_URL.replace(/\/$/, '');
+routes.url = APP_URL;
+defineRoutes(routes);
 
 import './tailwind.css';
 
@@ -81,7 +84,7 @@ if (Capacitor.isNativePlatform()) {
 
 // import md5 from 'crypto-js/md5'; // This Is How The X-Inertia-Version Is Generated
 
-axios.get('https://spa.pingcrm.test' + window.location.pathname + window.location.search, {
+axios.get(APP_URL + window.location.pathname + window.location.search, {
     mode: "cors",
     credentials: "include",
     withCredentials: true,
