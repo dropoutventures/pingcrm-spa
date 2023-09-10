@@ -28,13 +28,13 @@ axios.interceptors.request.use(
             try {
                 let token = await SecureStoragePlugin.get({key: 'csrfToken'});
                 if (['post', 'put', 'patch', 'delete'].includes(config.method)) {
-                    config.headers['X-CSRF-Token'] = token.value;
+                    config.headers['x-csrf-token'] = token.value;
                 }
             } catch (e) {
                 console.error('SecureStorage Error', e);
             }
         }
-        config.headers['X-Referer'] = window.location.pathname;
+        config.headers['x-referer'] = window.location.pathname;
         return config;
     }
 );
@@ -42,8 +42,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     async (response) => {
         // If it includes X-CSRF-Token, Save That To Storage
-        if (!!response.headers['X-CSRF-Token']) {
-            await SecureStoragePlugin.set({key: 'csrfToken', value: response.headers['X-CSRF-Token']});
+        if (!!response.headers['x-csrf-token']) {
+            await SecureStoragePlugin.set({key: 'csrfToken', value: response.headers['x-csrf-token']});
         }
         return response
     },
@@ -91,22 +91,22 @@ axios.get(APP_URL + window.location.pathname + window.location.search, {
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-Inertia': true,
+        'x-inertia': true,
     }
 })
     .then(response => {
-    document.getElementById("app").dataset.page = JSON.stringify(response.data);
-    createInertiaApp({
-        title: (title) => `${title}`,
-        resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
-        setup({el, App, props, plugin}) {
-            createApp({render: () => h(App, props)})
-                .mixin({ methods: { route, current } })
-                .use(trail, { routes })
-                .use(plugin)
-                .use(formkitPlugin, formkitDefaultConfig(formkitConfig))
-                .mount(el)
-        },
+        document.getElementById("app").dataset.page = JSON.stringify(response.data);
+        createInertiaApp({
+            title: (title) => `${title}`,
+            resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
+            setup({el, App, props, plugin}) {
+                createApp({render: () => h(App, props)})
+                    .mixin({ methods: { route, current } })
+                    .use(trail, { routes })
+                    .use(plugin)
+                    .use(formkitPlugin, formkitDefaultConfig(formkitConfig))
+                    .mount(el)
+            },
+        });
+        delete document.getElementById("app").dataset.page;
     });
-    delete document.getElementById("app").dataset.page;
-});
