@@ -1,0 +1,19 @@
+{
+  "appId": "test.pingcrm.spa",
+  "appName": "Ping CRM",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "pingcrm.test"
+  },
+  "ios": {
+    "backgroundColor": "#ffffff",
+    "allowsLinkPreview": false
+  },
+  "plugins": {
+    "CapacitorCookies": {
+      "enabled": true
+    }
+  }
+}
