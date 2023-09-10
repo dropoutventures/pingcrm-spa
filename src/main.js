@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 import { plugin as formkitPlugin, defaultConfig as formkitDefaultConfig } from '@formkit/vue';
@@ -49,19 +49,6 @@ axios.interceptors.response.use(
         }
         console.log('Response', response);
         return response
-    },
-    (error) => {
-        switch (error.response.status) {
-            case 401:
-                console.error('401');
-                window.location.href = route('login');
-                break;
-            case 404:
-                // TODO: Redirect to 404 Page, Or Show 404 Page
-                break;
-            default:
-                return Promise.reject(error);
-        }
     }
 );
 
@@ -88,25 +75,44 @@ if (Capacitor.isNativePlatform()) {
 
 // import md5 from 'crypto-js/md5'; // This Is How The X-Inertia-Version Is Generated
 
-axios.get(APP_URL + window.location.pathname + window.location.search, {
-    mode: "cors",
-    credentials: "include",
-    withCredentials: true,
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'x-Inertia': true,
+axios.get(
+    APP_URL + window.location.pathname + window.location.search,
+    {
+        mode: "cors",
+        credentials: "include",
+        withCredentials: true,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'x-Inertia': true,
+        }
     }
-})
-    .then(async response => {
+)
+    .catch(async (error) => {
+        console.log('error', error);
+        return await axios.get(
+            route('login'),
+            {
+                mode: "cors",
+                credentials: "include",
+                withCredentials: true,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'x-Inertia': true,
+                }
+            }
+        );
+    })
+    .then(async (response) => {
         document.getElementById("app").dataset.page = JSON.stringify(response.data);
         await createInertiaApp({
             title: (title) => `${title}`,
             resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
             setup({el, App, props, plugin}) {
                 createApp({render: () => h(App, props)})
-                    .mixin({ methods: { route, current } })
-                    .use(trail, { routes })
+                    .mixin({methods: {route, current}})
+                    .use(trail, {routes})
                     .use(plugin)
                     .use(formkitPlugin, formkitDefaultConfig(formkitConfig))
                     .mount(el)
@@ -114,3 +120,20 @@ axios.get(APP_URL + window.location.pathname + window.location.search, {
         });
         delete document.getElementById("app").dataset.page;
     });
+
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        switch (error.response.status) {
+            case 401:
+                console.error('Interceptor 401');
+                window.location.href = route('login');
+                break;
+            case 404:
+                // TODO: Redirect to 404 Page, Or Show 404 Page
+                break;
+            default:
+                return Promise.reject(error);
+        }
+    }
+);
