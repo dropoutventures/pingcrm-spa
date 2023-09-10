@@ -1,6 +1,6 @@
 <template>
   <AppLayout header-title="Create Contact">
-    <FormKit type="form" @submit="save" v-model="form" formClass="grid grid-cols-12 gap-3">
+    <FormKit type="form" @submit="save" formClass="grid grid-cols-12 gap-3">
       <FormKit type="hidden" name="account_id" :value="1" />
       <FormKit type="text" name="first_name" label="First Name" outerClass="col-span-6" innerClass="ring-gray-300" />
       <FormKit type="text" name="last_name" label="Last Name" outerClass="col-span-6" />
@@ -12,16 +12,9 @@
 
 <script setup>
 import AppLayout from "@/layouts/AppLayout.vue";
-import { useForm } from '@inertiajs/vue3';
+import { useInertia as useInertiaForm } from "formkit-addon-inertia";
 
-const form = useForm({
-  first_name: null,
-  last_name: null,
-  email: null,
-  phone: null,
-})
-
-function save() {
-  form.post(route('contacts.store'))
+function save(fields, node) {
+  useInertiaForm(node).post(route('contacts.store'), fields)
 }
 </script>

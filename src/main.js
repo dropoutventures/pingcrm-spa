@@ -27,14 +27,13 @@ axios.interceptors.request.use(
             // config.headers['Authorization'] = '<API_TOKEN_HERE>';
             try {
                 let token = await SecureStoragePlugin.get({key: 'csrfToken'});
-                if (['post', 'put', 'patch', 'delete'].includes(config.method)) {
-                    config.headers['x-csrf-token'] = token.value;
-                }
+                config.headers['x-csrf-token'] = token.value;
             } catch (e) {
                 console.error('SecureStorage Error', e);
             }
         }
         config.headers['x-referer'] = window.location.pathname;
+        console.log('Request', config);
         return config;
     }
 );
@@ -43,13 +42,18 @@ axios.interceptors.response.use(
     async (response) => {
         // If it includes X-CSRF-Token, Save That To Storage
         if (!!response.headers['x-csrf-token']) {
-            await SecureStoragePlugin.set({key: 'csrfToken', value: response.headers['x-csrf-token']});
+            if (Capacitor.isNativePlatform()) {
+                // Is It Should Replacing??
+                await SecureStoragePlugin.set({key: 'csrfToken', value: response.headers['x-csrf-token']});
+            }
         }
+        console.log('Response', response);
         return response
     },
     (error) => {
         switch (error.response.status) {
             case 401:
+                console.error('401');
                 window.location.href = route('login');
                 break;
             case 404:
@@ -91,12 +95,12 @@ axios.get(APP_URL + window.location.pathname + window.location.search, {
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'x-inertia': true,
+        'x-Inertia': true,
     }
 })
-    .then(response => {
+    .then(async response => {
         document.getElementById("app").dataset.page = JSON.stringify(response.data);
-        createInertiaApp({
+        await createInertiaApp({
             title: (title) => `${title}`,
             resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
             setup({el, App, props, plugin}) {

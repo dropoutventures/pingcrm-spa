@@ -20,7 +20,6 @@
 
 <script setup>
 import AppLayout from "@/layouts/AppLayout.vue";
-import { useForm } from '@inertiajs/vue3';
 import { useInertia as useInertiaForm } from "formkit-addon-inertia";
 
 const props = defineProps({
