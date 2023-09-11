@@ -6,6 +6,8 @@
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Sign in to your account</h2>
     </section>
 
+    <!--<pre class="text-red-500">{{ usePage().props.flash.error }}</pre>-->
+
     <FormKit type="form" @submit="login" formClass="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6" :actions="false"
       :value="{ email: 'johndoe@example.com', password: 'secret' }"
     >
@@ -22,7 +24,7 @@
 </template>
 
 <script setup>
-import { Link, Head } from '@inertiajs/vue3';
+import {Link, Head, usePage} from '@inertiajs/vue3';
 import Logo from "@/components/Logo.vue";
 import { useInertia as useInertiaForm } from "formkit-addon-inertia";
 import { Icon } from "@iconify/vue";

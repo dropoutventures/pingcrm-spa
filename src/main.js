@@ -9,6 +9,7 @@ import { Capacitor } from '@capacitor/core';
 import { SafeArea } from 'capacitor-plugin-safe-area';
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { SuppressLongpressGesture } from 'capacitor-suppress-longpress-gesture';
 
 import { trail, defineRoutes, route, current } from "momentum-trail";
 import routes from './routes.json';
@@ -44,7 +45,8 @@ axios.interceptors.response.use(
         if (!!response.headers['x-csrf-token']) {
             if (Capacitor.isNativePlatform()) {
                 // Is It Should Replacing??
-                await SecureStoragePlugin.set({key: 'csrfToken', value: response.headers['x-csrf-token']});
+                await SecureStoragePlugin.remove({ key: 'csrfToken' });
+                await SecureStoragePlugin.set({ key: 'csrfToken', value: response.headers['x-csrf-token'] });
             }
         }
         console.log('Response', response);
@@ -53,7 +55,9 @@ axios.interceptors.response.use(
 );
 
 if (Capacitor.isNativePlatform()) {
+    document.getElementById("app").dataset.isNativePlatform = Capacitor.getPlatform();
     await StatusBar.setStyle({style: Style.Dark});
+    SuppressLongpressGesture.deactivateService();
     SafeArea.getSafeAreaInsets().then(({insets}) => {
         for (const [key, value] of Object.entries(insets)) {
             document.documentElement.style.setProperty(
@@ -74,6 +78,22 @@ if (Capacitor.isNativePlatform()) {
 }
 
 // import md5 from 'crypto-js/md5'; // This Is How The X-Inertia-Version Is Generated
+
+const loginPageData = {
+    "component": "Auth\/Login",
+    "props": {
+        "errors": {},
+        "auth": {
+            "user": null
+        },
+        "flash": {
+            "success": null,
+            "error": null
+        }
+    },
+    "url": "\/login",
+    "version": ""
+};
 
 axios.get(
     APP_URL + window.location.pathname + window.location.search,
@@ -107,7 +127,7 @@ axios.get(
     .then(async (response) => {
         document.getElementById("app").dataset.page = JSON.stringify(response.data);
         await createInertiaApp({
-            title: (title) => `${title}`,
+            title: (title) => (!!title ? `${title} - ` : '') + import.meta.env.VITE_APP_NAME,
             resolve: (name) => resolvePageComponent(`./views/${name}.vue`, import.meta.glob('./views/**/*.vue')),
             setup({el, App, props, plugin}) {
                 createApp({render: () => h(App, props)})
@@ -128,6 +148,9 @@ axios.interceptors.response.use(
             case 401:
                 console.error('Interceptor 401');
                 window.location.href = route('login');
+                break;
+            case 419:
+                console.info('Interceptor 419');
                 break;
             case 404:
                 // TODO: Redirect to 404 Page, Or Show 404 Page
