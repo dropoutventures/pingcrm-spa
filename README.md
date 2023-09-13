@@ -59,5 +59,5 @@ Maybe both of these can be done in the same request, as the Routes can be includ
 
 Here is an exampoe of a route, since the pages are loaded locally from the SPA, if the name doesn't match what ever is defaulted you'll have to send it as a query parameter:
 ```vue
-<Link :href="route('index', { component: 'Welcome' })">Welcome Page</Link>
+<Link :href="route('dashboard', { component: 'Welcome' })">Welcome Page</Link>
 ```

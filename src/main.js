@@ -45,7 +45,7 @@ axios.interceptors.response.use(
         if (!!response.headers['x-csrf-token']) {
             if (Capacitor.isNativePlatform()) {
                 // Is It Should Replacing??
-                await SecureStoragePlugin.remove({ key: 'csrfToken' });
+                // await SecureStoragePlugin.remove({ key: 'csrfToken' });
                 await SecureStoragePlugin.set({ key: 'csrfToken', value: response.headers['x-csrf-token'] });
             }
         }
@@ -56,6 +56,7 @@ axios.interceptors.response.use(
 
 if (Capacitor.isNativePlatform()) {
     document.getElementById("app").dataset.isNativePlatform = Capacitor.getPlatform();
+
     await StatusBar.setStyle({style: Style.Dark});
     SuppressLongpressGesture.deactivateService();
     SafeArea.getSafeAreaInsets().then(({insets}) => {
@@ -78,22 +79,6 @@ if (Capacitor.isNativePlatform()) {
 }
 
 // import md5 from 'crypto-js/md5'; // This Is How The X-Inertia-Version Is Generated
-
-const loginPageData = {
-    "component": "Auth\/Login",
-    "props": {
-        "errors": {},
-        "auth": {
-            "user": null
-        },
-        "flash": {
-            "success": null,
-            "error": null
-        }
-    },
-    "url": "\/login",
-    "version": ""
-};
 
 axios.get(
     APP_URL + window.location.pathname + window.location.search,
@@ -144,6 +129,7 @@ axios.get(
 axios.interceptors.response.use(
     (response) => response,
     (error) => {
+        console.info(`Response Error ${error.response.status}`);
         switch (error.response.status) {
             case 401:
                 console.error('Interceptor 401');
@@ -155,8 +141,7 @@ axios.interceptors.response.use(
             case 404:
                 // TODO: Redirect to 404 Page, Or Show 404 Page
                 break;
-            default:
-                return Promise.reject(error);
         }
+        return Promise.reject(error);
     }
 );

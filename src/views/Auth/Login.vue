@@ -29,7 +29,7 @@
       <FormKit type="submit">Sign In</FormKit>
     </FormKit>
 
-    <Link :href="route('index')" class="mx-auto mt-3 inline-flex items-center space-x-1 text-indigo-50 hover:text-indigo-300 hover:underline text-sm">
+    <Link :href="route('dashboard')" class="mx-auto mt-3 inline-flex items-center space-x-1 text-indigo-50 hover:text-indigo-300 hover:underline text-sm">
       <Icon icon="mdi:arrow-left" class="h-4 w-4 inline-block" />
       <span>Back To Home</span>
     </Link>

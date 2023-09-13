@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.joblinkconnect.app</string>
+	<string>test.pingcrm.spa</string>
 	<key>PROJECT_ID</key>
 	<string>pingcrm-93dae</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:23339164857:ios:1cad75cf1e3f6a2d23a768</string>
+	<string>1:23339164857:ios:a406714d5dbf408a23a768</string>
 </dict>
 </plist>
