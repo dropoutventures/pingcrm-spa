@@ -21,13 +21,17 @@
       </div>
     </article>
 
-    <FormKit type="form" @submit="login" formClass="sm:mx-auto sm:w-full sm:max-w-sm space-y-6" :actions="false"
+    <FormKit type="form" ref="form" @submit="login" formClass="sm:mx-auto sm:w-full sm:max-w-sm space-y-6" :actions="false"
       :value="{ email: 'johndoe@example.com', password: 'secret' }"
     >
       <FormKit type="email" name="email" label="Email address" innerClass="$remove:ring-gray-300 ring-white/10" inputClass="$remove:text-gray-900 text-gray-50" labelClass="text-white" />
       <FormKit type="password" name="password" label="Password" innerClass="$remove:ring-gray-300 ring-white/10" inputClass="$remove:text-gray-900 text-gray-50" labelClass="text-white" />
       <FormKit type="submit">Sign In</FormKit>
     </FormKit>
+
+    <FormKit v-if="Capacitor.isNativePlatform()" type="button" @click="performBiometricVerification"
+      label="Sign In with FaceID"
+    />
 
     <Link :href="route('dashboard')" class="mx-auto mt-3 inline-flex items-center space-x-1 text-indigo-50 hover:text-indigo-300 hover:underline text-sm">
       <Icon icon="mdi:arrow-left" class="h-4 w-4 inline-block" />
@@ -41,8 +45,74 @@ import {Link, Head, usePage} from '@inertiajs/vue3';
 import Logo from "@/components/Logo.vue";
 import { useInertia as useInertiaForm } from "formkit-addon-inertia";
 import { Icon } from "@iconify/vue";
+import { Capacitor } from "@capacitor/core";
+import { NativeBiometric, BiometryType } from "@capgo/capacitor-native-biometric";
 
-function login(fields, node) {
-  useInertiaForm(node).post(route('login'), fields)
+const form = ref();
+
+// TODO: We can store somewhere that FaceID is enabled and automatically try and login with it.
+
+async function performBiometricVerification(){
+  const result = await NativeBiometric.isAvailable();
+
+  if(!result.isAvailable) return;
+
+  const isFaceID = result.biometryType === BiometryType.FACE_ID;
+
+  const verified = await NativeBiometric.verifyIdentity({
+    reason: "For easy log in",
+    title: "Log in",
+    subtitle: "Maybe add subtitle here?",
+    description: "Maybe a description too?",
+  })
+      .then(() => true)
+      .catch(() => false);
+
+  if(!verified) return;
+
+  let credentials;
+  try {
+    credentials = await NativeBiometric.getCredentials({
+      server: import.meta.env.VITE_APP_URL,
+    });
+  } catch(error) {
+    console.log('no credentials set');
+    // Do Something If They Didn't Setup FaceID/TouchID
+    credentials = false;
+  }
+
+  if(!credentials) return;
+
+  // TODO: Fill Form with Credentials and Submit
+
+  console.log('credentials:', credentials);
+  login({
+    email: credentials.username,
+    password: credentials.password,
+  }, form.value.node, false);
+}
+
+function login(fields, node, saveCredentials = true) {
+  useInertiaForm(node)
+      .post(route('login'), fields, {
+        onSuccess: async () => {
+          if (saveCredentials && Capacitor.isNativePlatform()) {
+
+            const result = await NativeBiometric.isAvailable();
+
+            console.log('try to set credentials....', result.isAvailable);
+
+            if(!result.isAvailable) return;
+
+            NativeBiometric.setCredentials({
+              username: fields.email,
+              password: fields.password,
+              server: import.meta.env.VITE_APP_URL,
+            }).then();
+
+            console.log('setCredentials');
+          }
+        }
+      })
 }
 </script>

@@ -13,6 +13,8 @@ PODS:
     - Capacitor
   - CapacitorSuppressLongpressGesture (0.0.6):
     - Capacitor
+  - CapgoCapacitorNativeBiometric (0.0.1):
+    - Capacitor
   - Firebase/CoreOnly (10.14.0):
     - FirebaseCore (= 10.14.0)
   - Firebase/Messaging (10.14.0):
@@ -75,6 +77,7 @@ DEPENDENCIES:
   - CapacitorSecureStoragePlugin (from `../../node_modules/capacitor-secure-storage-plugin`)
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CapacitorSuppressLongpressGesture (from `../../node_modules/capacitor-suppress-longpress-gesture`)
+  - "CapgoCapacitorNativeBiometric (from `../../node_modules/@capgo/capacitor-native-biometric`)"
   - Firebase/Messaging
 
 SPEC REPOS:
@@ -105,6 +108,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorSuppressLongpressGesture:
     :path: "../../node_modules/capacitor-suppress-longpress-gesture"
+  CapgoCapacitorNativeBiometric:
+    :path: "../../node_modules/@capgo/capacitor-native-biometric"
 
 SPEC CHECKSUMS:
   Capacitor: 1ac9165943bc4f2137642d218c5ba05df811de69
@@ -114,6 +119,7 @@ SPEC CHECKSUMS:
   CapacitorSecureStoragePlugin: e91d7df060f2495a1acff9583641a6953e3aacba
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapacitorSuppressLongpressGesture: c31482c434abebc4e3fa3d6dee81dc5de8d3242c
+  CapgoCapacitorNativeBiometric: 44b0bb31118f6ed5171087a77a856a80a0cfa250
   Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseCore: 6fc17ac9f03509d51c131298aacb3ee5698b4f02
   FirebaseCoreInternal: d558159ee6cc4b823c2296ecc193de9f6d9a5bb3
@@ -125,6 +131,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: d6a97617a82cf79f0b9445f3229be38edd2c3b8c
+PODFILE CHECKSUM: 1224930d6fe096fd6552d3017dd313b435f795f1
 
 COCOAPODS: 1.12.1

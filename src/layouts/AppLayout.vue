@@ -70,6 +70,7 @@ import { Icon } from "@iconify/vue";
 import Logo from "@/components/Logo.vue";
 import { Capacitor } from "@capacitor/core";
 import { PushNotifications } from '@capacitor/push-notifications';
+import { NativeBiometric, BiometryType } from "@capgo/capacitor-native-biometric";
 import axios from "axios";
 import { store } from '@/state.js';
 
