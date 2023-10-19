@@ -21,16 +21,15 @@
       </div>
     </article>
 
-    <FormKit type="captcha"
-       name="captcha"
-       :puzzle="captcha.puzzle"
-       :piece="captcha.piece"
-       :y="captcha.y"
-    />
-
     <FormKit type="form" ref="form" @submit="login" formClass="sm:mx-auto sm:w-full sm:max-w-sm space-y-6" :actions="false"
       :value="{ email: 'johndoe@example.com', password: 'secret' }"
     >
+      <FormKit type="captcha"
+               name="captcha"
+               :puzzle="captcha.puzzle"
+               :piece="captcha.piece"
+               :y="captcha.y"
+      />
       <FormKit type="email" name="email" label="Email address" innerClass="$remove:ring-gray-300 ring-white/10" inputClass="$remove:text-gray-900 text-gray-50" labelClass="text-white" />
       <FormKit type="password" name="password" label="Password" innerClass="$remove:ring-gray-300 ring-white/10" inputClass="$remove:text-gray-900 text-gray-50" labelClass="text-white" />
       <FormKit type="submit">Sign In</FormKit>
