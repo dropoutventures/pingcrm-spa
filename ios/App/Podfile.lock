@@ -4,6 +4,8 @@ PODS:
   - CapacitorCordova (5.3.0)
   - CapacitorPluginSafeArea (2.0.5):
     - Capacitor
+  - CapacitorPreferences (5.0.6):
+    - Capacitor
   - CapacitorPushNotifications (5.0.6):
     - Capacitor
   - CapacitorSecureStoragePlugin (0.9.0):
@@ -73,6 +75,7 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
+  - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - CapacitorSecureStoragePlugin (from `../../node_modules/capacitor-secure-storage-plugin`)
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
@@ -100,6 +103,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorPluginSafeArea:
     :path: "../../node_modules/capacitor-plugin-safe-area"
+  CapacitorPreferences:
+    :path: "../../node_modules/@capacitor/preferences"
   CapacitorPushNotifications:
     :path: "../../node_modules/@capacitor/push-notifications"
   CapacitorSecureStoragePlugin:
@@ -115,6 +120,7 @@ SPEC CHECKSUMS:
   Capacitor: 1ac9165943bc4f2137642d218c5ba05df811de69
   CapacitorCordova: b9374d68e63ce29e96ab5db994cf14fbefd722c9
   CapacitorPluginSafeArea: bfdd714827dbd89fb44fea286beec996e1b0c5c4
+  CapacitorPreferences: f03954bcb0ff09c792909e46bff88e3183c16b10
   CapacitorPushNotifications: 7eb70469f1fcc3dec07126336d4896520e4991db
   CapacitorSecureStoragePlugin: e91d7df060f2495a1acff9583641a6953e3aacba
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
@@ -131,6 +137,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 1224930d6fe096fd6552d3017dd313b435f795f1
+PODFILE CHECKSUM: 1a0bc60763a225b84e2601360bb725f2c6004c55
 
 COCOAPODS: 1.12.1

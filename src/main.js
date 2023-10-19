@@ -1,4 +1,4 @@
-import { createApp, h } from 'vue';
+import { createApp, h, watch } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
@@ -22,13 +22,35 @@ import './tailwind.css';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
+import { store } from '@/state.js';
+
+const defaultHeaders = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'x-Inertia': true,
+};
+
+console.log('csrfToken Initial State:', store.csrfToken);
+watch(() => store.csrfToken, (csrfToken) => {
+    if (!csrfToken) {
+        console.log('refetch csrfToken', csrfToken);
+        axios.get(route('sanctum.csrf'), {
+            headers: defaultHeaders
+        })
+            .then(response => {
+                console.log('csrf-cookie', response.headers['x-csrf-token']);
+                store.csrfToken = response.headers['x-csrf-token'];
+            });
+    }
+});
+
 axios.interceptors.request.use(
     async (config) => {
         if (Capacitor.isNativePlatform()) {
             // config.headers['Authorization'] = '<API_TOKEN_HERE>';
             try {
-                let token = await SecureStoragePlugin.get({key: 'csrfToken'});
-                config.headers['x-csrf-token'] = token.value;
+                // let token = await SecureStoragePlugin.get({key: 'csrfToken'});
+                config.headers['x-csrf-token'] = store.csrfToken;
             } catch (e) {
                 console.error('SecureStorage Error', e);
             }
@@ -45,8 +67,9 @@ axios.interceptors.response.use(
         if (!!response.headers['x-csrf-token']) {
             if (Capacitor.isNativePlatform()) {
                 // Is It Should Replacing??
+                store.csrfToken = response.headers['x-csrf-token'];
                 // await SecureStoragePlugin.remove({ key: 'csrfToken' });
-                await SecureStoragePlugin.set({ key: 'csrfToken', value: response.headers['x-csrf-token'] });
+                // await SecureStoragePlugin.set({ key: 'csrfToken', value: response.headers['x-csrf-token'] });
             }
         }
         console.log('Response', response);
@@ -86,11 +109,7 @@ axios.get(
         mode: "cors",
         credentials: "include",
         withCredentials: true,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'x-Inertia': true,
-        }
+        headers: defaultHeaders
     }
 )
     .catch(async (error) => {
@@ -101,11 +120,7 @@ axios.get(
                 mode: "cors",
                 credentials: "include",
                 withCredentials: true,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'x-Inertia': true,
-                }
+                headers: defaultHeaders
             }
         );
     })
@@ -130,6 +145,7 @@ axios.interceptors.response.use(
     (response) => response,
     (error) => {
         console.info(`Response Error ${error.response.status}`);
+        // TODO: If the Tokens get expired, we should retry with the CSRF endpoint
         switch (error.response.status) {
             case 401:
                 console.error('Interceptor 401');
