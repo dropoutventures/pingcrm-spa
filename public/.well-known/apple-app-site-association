@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "WQK36FFTHG.test.pingcrm.spa",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

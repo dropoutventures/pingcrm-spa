@@ -1,6 +1,10 @@
 PODS:
   - Capacitor (5.3.0):
     - CapacitorCordova
+  - CapacitorApp (5.0.6):
+    - Capacitor
+  - CapacitorBrowser (5.1.0):
+    - Capacitor
   - CapacitorCordova (5.3.0)
   - CapacitorPluginSafeArea (2.0.5):
     - Capacitor
@@ -73,6 +77,8 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
@@ -99,6 +105,10 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorBrowser:
+    :path: "../../node_modules/@capacitor/browser"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorPluginSafeArea:
@@ -118,6 +128,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 1ac9165943bc4f2137642d218c5ba05df811de69
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorBrowser: 7a0fb6a1011abfaaf2dfedfd8248f942a8eda3d6
   CapacitorCordova: b9374d68e63ce29e96ab5db994cf14fbefd722c9
   CapacitorPluginSafeArea: bfdd714827dbd89fb44fea286beec996e1b0c5c4
   CapacitorPreferences: f03954bcb0ff09c792909e46bff88e3183c16b10
@@ -137,6 +149,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 1a0bc60763a225b84e2601360bb725f2c6004c55
+PODFILE CHECKSUM: 4320d34c48fddfa00ffab830082722e62a1ea16b
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

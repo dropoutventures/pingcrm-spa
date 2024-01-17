@@ -6,6 +6,7 @@ import { plugin as inertiaPlugin } from "formkit-addon-inertia"
 
 // Custom Inputs
 import Captcha from "@/components/Captcha.vue";
+import OTP from "@/components/OTP.vue";
 
 function iconLoader (iconName) {
     return fetch(`https://api.iconify.design/${iconName}.svg`)
@@ -43,6 +44,10 @@ export default {
     inputs: {
         captcha: createInput(Captcha, {
             props: ['puzzle', 'piece', 'y'],
+        }),
+        otp: createInput(OTP, {
+            props: ['digits'],
+            family: 'text',
         }),
     },
     plugins: [

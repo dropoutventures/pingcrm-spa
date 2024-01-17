@@ -6,6 +6,7 @@ import { plugin as formkitPlugin, defaultConfig as formkitDefaultConfig } from '
 import formkitConfig from '../formkit.config.js';
 
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { SafeArea } from 'capacitor-plugin-safe-area';
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -21,6 +22,12 @@ import './tailwind.css';
 
 import axios from 'axios';
 axios.defaults.withCredentials = true;
+
+App.addListener('appUrlOpen', function (event) {
+    // Example url: https://beerswift.app/tabs/tabs2
+    // slug = /tabs/tabs2
+    console.log('event', event);
+});
 
 import { store } from '@/state.js';
 
@@ -146,7 +153,7 @@ axios.interceptors.response.use(
     (error) => {
         console.info(`Response Error ${error.response.status}`);
         // TODO: If the Tokens get expired, we should retry with the CSRF endpoint
-        switch (error.response.status) {
+        switch (error.response?.status) {
             case 401:
                 console.error('Interceptor 401');
                 window.location.href = route('login');
@@ -156,6 +163,9 @@ axios.interceptors.response.use(
                 break;
             case 404:
                 // TODO: Redirect to 404 Page, Or Show 404 Page
+                break;
+            default:
+                console.error(error);
                 break;
         }
         return Promise.reject(error);

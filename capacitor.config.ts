@@ -4,7 +4,7 @@ import { loadEnv } from 'vite';
 process.env = {...process.env, ...loadEnv(process.env.NODE_ENV, process.cwd())};
 
 let config: CapacitorConfig = {
-  appId: 'test.pingcrm.spa', // process.env.VITE_APP_URL.split('.').reverse().join('.'),
+  appId: process.env.VITE_APP_URL.split('.').reverse().join('.'),
   appName: process.env.VITE_APP_NAME,
   webDir: "dist",
   server: {
